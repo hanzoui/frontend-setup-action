@@ -29,9 +29,15 @@ runs:
         repository: 'Comfy-Org/ComfyUI_devtools'
         path: 'ComfyUI/custom_nodes/ComfyUI_devtools'
         ref: ${{ inputs.devtools_ref }}
-    - uses: actions/setup-node@v3
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+    - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+        cache: 'pnpm'
+        cache-dependency-path: 'ComfyUI_frontend/pnpm-lock.yaml'
     - uses: actions/setup-python@v4
       with:
         python-version: '3.10'
@@ -45,8 +51,8 @@ runs:
       working-directory: ComfyUI
     - name: Build & Install ComfyUI_frontend
       run: |
-        npm ci
-        npm run build
+        pnpm install --frozen-lockfile
+        pnpm build
       shell: bash
       working-directory: ComfyUI_frontend
     - name: Start ComfyUI server
