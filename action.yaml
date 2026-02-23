@@ -27,7 +27,7 @@ runs:
       uses: actions/checkout@v4
       with:
         repository: 'hanzoui/devtools'
-        path: 'Hanzo Studio/custom_nodes/HanzoStudio_devtools'
+        path: 'HanzoStudio/custom_nodes/HanzoStudio_devtools'
         ref: ${{ inputs.devtools_ref }}
     - name: Install pnpm
       uses: pnpm/action-setup@v4
