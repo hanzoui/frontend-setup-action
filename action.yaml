@@ -1,33 +1,33 @@
 name: Setup
-description: 'Setup ComfyUI frontend'
+description: 'Setup Hanzo Studio frontend'
 inputs:
   extra_server_params:
-    description: 'Additional parameters to pass to ComfyUI server'
+    description: 'Additional parameters to pass to Hanzo Studio server'
     required: false
     default: ''
   devtools_ref:
-    description: 'Reference to use for ComfyUI_devtools'
+    description: 'Reference to use for Hanzo Studio_devtools'
     required: false
     default: 'main'
 runs:
   using: 'composite'
   steps:
-    - name: Checkout ComfyUI
+    - name: Checkout Hanzo Studio
       uses: actions/checkout@v4
       with:
-        repository: 'Comfy-Org/ComfyUI'
-        path: 'ComfyUI'
+        repository: 'hanzoai/studio'
+        path: 'Hanzo Studio'
         ref: master
-    - name: Checkout ComfyUI_frontend
+    - name: Checkout Hanzo Studio_frontend
       uses: actions/checkout@v4
       with:
-        repository: 'Comfy-Org/ComfyUI_frontend'
-        path: 'ComfyUI_frontend'
-    - name: Checkout ComfyUI_devtools
+        repository: 'hanzoui/frontend'
+        path: 'Hanzo Studio_frontend'
+    - name: Checkout Hanzo Studio_devtools
       uses: actions/checkout@v4
       with:
-        repository: 'Comfy-Org/ComfyUI_devtools'
-        path: 'ComfyUI/custom_nodes/ComfyUI_devtools'
+        repository: 'hanzoui/devtools'
+        path: 'Hanzo Studio/custom_nodes/Hanzo Studio_devtools'
         ref: ${{ inputs.devtools_ref }}
     - name: Install pnpm
       uses: pnpm/action-setup@v4
@@ -37,7 +37,7 @@ runs:
       with:
         node-version: lts/*
         cache: 'pnpm'
-        cache-dependency-path: 'ComfyUI_frontend/pnpm-lock.yaml'
+        cache-dependency-path: 'Hanzo Studio_frontend/pnpm-lock.yaml'
     - uses: actions/setup-python@v4
       with:
         python-version: '3.10'
@@ -48,16 +48,16 @@ runs:
         pip install -r requirements.txt
         pip install wait-for-it
       shell: bash
-      working-directory: ComfyUI
-    - name: Build & Install ComfyUI_frontend
+      working-directory: Hanzo Studio
+    - name: Build & Install Hanzo Studio_frontend
       run: |
         pnpm install --frozen-lockfile
         pnpm build
       shell: bash
-      working-directory: ComfyUI_frontend
-    - name: Start ComfyUI server
+      working-directory: Hanzo Studio_frontend
+    - name: Start Hanzo Studio server
       run: |
-        python main.py --cpu --multi-user --front-end-root ../ComfyUI_frontend/dist ${{ inputs.extra_params }} &
+        python main.py --cpu --multi-user --front-end-root ../Hanzo Studio_frontend/dist ${{ inputs.extra_params }} &
         wait-for-it --service 127.0.0.1:8188 -t 600
-      working-directory: ComfyUI
+      working-directory: Hanzo Studio
       shell: bash
