@@ -1,2 +1,2 @@
-# Hanzo Studio_frontend_setup_action
-Setup action for Hanzo Studio_frontend
+# HanzoStudio_frontend_setup_action
+Setup action for HanzoStudio_frontend
