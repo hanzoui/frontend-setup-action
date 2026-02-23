@@ -6,7 +6,7 @@ inputs:
     required: false
     default: ''
   devtools_ref:
-    description: 'Reference to use for Hanzo Studio_devtools'
+    description: 'Reference to use for HanzoStudio_devtools'
     required: false
     default: 'main'
 runs:
@@ -18,16 +18,16 @@ runs:
         repository: 'hanzoai/studio'
         path: 'Hanzo Studio'
         ref: master
-    - name: Checkout Hanzo Studio_frontend
+    - name: Checkout HanzoStudio_frontend
       uses: actions/checkout@v4
       with:
         repository: 'hanzoui/frontend'
-        path: 'Hanzo Studio_frontend'
-    - name: Checkout Hanzo Studio_devtools
+        path: 'HanzoStudio_frontend'
+    - name: Checkout HanzoStudio_devtools
       uses: actions/checkout@v4
       with:
         repository: 'hanzoui/devtools'
-        path: 'Hanzo Studio/custom_nodes/Hanzo Studio_devtools'
+        path: 'Hanzo Studio/custom_nodes/HanzoStudio_devtools'
         ref: ${{ inputs.devtools_ref }}
     - name: Install pnpm
       uses: pnpm/action-setup@v4
@@ -37,7 +37,7 @@ runs:
       with:
         node-version: lts/*
         cache: 'pnpm'
-        cache-dependency-path: 'Hanzo Studio_frontend/pnpm-lock.yaml'
+        cache-dependency-path: 'HanzoStudio_frontend/pnpm-lock.yaml'
     - uses: actions/setup-python@v4
       with:
         python-version: '3.10'
@@ -49,15 +49,15 @@ runs:
         pip install wait-for-it
       shell: bash
       working-directory: Hanzo Studio
-    - name: Build & Install Hanzo Studio_frontend
+    - name: Build & Install HanzoStudio_frontend
       run: |
         pnpm install --frozen-lockfile
         pnpm build
       shell: bash
-      working-directory: Hanzo Studio_frontend
+      working-directory: HanzoStudio_frontend
     - name: Start Hanzo Studio server
       run: |
-        python main.py --cpu --multi-user --front-end-root ../Hanzo Studio_frontend/dist ${{ inputs.extra_params }} &
+        python main.py --cpu --multi-user --front-end-root ../HanzoStudio_frontend/dist ${{ inputs.extra_params }} &
         wait-for-it --service 127.0.0.1:8188 -t 600
       working-directory: Hanzo Studio
       shell: bash
